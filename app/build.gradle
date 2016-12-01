@@ -31,6 +31,7 @@ android {
 }
 
 dependencies {
+    testCompile 'junit:junit:4.12'
     compile 'com.abooc.debug:debug-core:1.1.4'
 
     compile 'cn.leancloud.android:avoscloud-sdk:v3.13.+'
