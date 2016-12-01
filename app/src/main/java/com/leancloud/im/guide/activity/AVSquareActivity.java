@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.Menu;
+import android.view.MenuItem;
 
 import com.avos.avoscloud.im.v2.AVIMClient;
 import com.avos.avoscloud.im.v2.AVIMConversation;
@@ -15,8 +16,8 @@ import com.avos.avoscloud.im.v2.callback.AVIMConversationQueryCallback;
 import com.leancloud.im.guide.AVImClientManager;
 import com.leancloud.im.guide.Constants;
 import com.leancloud.im.guide.R;
-import com.leancloud.im.guide.fragment.ChatFragment;
 import com.leancloud.im.guide.event.LeftChatItemClickEvent;
+import com.leancloud.im.guide.fragment.ChatFragment;
 
 import java.util.Arrays;
 import java.util.List;
@@ -68,6 +69,15 @@ public class AVSquareActivity extends AVBaseActivity {
   public boolean onCreateOptionsMenu(Menu menu) {
     getMenuInflater().inflate(R.menu.menu_square, menu);
     return true;
+  }
+
+  @Override
+  public boolean onOptionsItemSelected(MenuItem item) {
+    String conversationId = getIntent().getStringExtra(Constants.CONVERSATION_ID);
+    Intent intent = new Intent(this, AVSquareMembersActivity.class);
+    intent.putExtra(Constants.CONVERSATION_ID, conversationId);
+    startActivity(intent);
+    return super.onOptionsItemSelected(item);
   }
 
   @Override

@@ -22,7 +22,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:text="在线用户列表" />
+                android:text="展示在线信息..." />
         </LinearLayout>
 
         <LinearLayout
