@@ -1,4 +1,4 @@
-# LeanMessage Android Demo 使用指南
+# leancloud-chatroom Android Demo 使用指南
 
 
 ### 如何运行
