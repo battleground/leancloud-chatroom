@@ -1,5 +1,6 @@
 package com.leancloud.im.guide;
 
+import com.abooc.util.Debug;
 import com.avos.avoscloud.AVOSCloud;
 import com.avos.avoscloud.im.v2.AVIMMessageManager;
 import com.avos.avoscloud.im.v2.AVIMTypedMessage;
@@ -11,6 +12,7 @@ public class Application extends android.app.Application {
 
   @Override
   public void onCreate() {
+    Debug.enable(BuildConfig.DEBUG);
     super.onCreate();
 
     // 这是使用美国节点的 app 信息，如果不使用美国节点，请 comment 这两行
@@ -23,6 +25,7 @@ public class Application extends android.app.Application {
 //    AVOSCloud.initialize(this, "m7baukzusy3l5coew0b3em5uf4df5i2krky0ypbmee358yon",
 //        "2e46velw0mqrq3hl2a047yjtpxn32frm0m253k258xo63ft9");
 
+    // "直播间聊天系统" 测试key
     AVOSCloud.initialize(this, "Ly7xoqX3c4P8hn7pYQoDaxXv-gzGzoHsz",
         "KjaBxRRx7H6udI3VMRGde4tl");
 

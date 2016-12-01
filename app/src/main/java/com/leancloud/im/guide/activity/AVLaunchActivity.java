@@ -3,6 +3,7 @@ package com.leancloud.im.guide.activity;
 import android.os.Bundle;
 import android.os.Handler;
 
+import com.abooc.util.Debug;
 import com.leancloud.im.guide.R;
 
 /**
@@ -14,6 +15,7 @@ public class AVLaunchActivity extends AVBaseActivity {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    Debug.anchor("程序启动...");
     setContentView(R.layout.activity_launch);
 
     /**
