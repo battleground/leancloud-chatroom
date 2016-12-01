@@ -23,8 +23,6 @@ public class UserLoader {
     private UserLoader() {
     }
 
-
-
     public static void loadUsers(OnGetUsersListener callback) {
 
         if (callback != null) {
