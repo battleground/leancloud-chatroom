@@ -19,25 +19,25 @@ import butterknife.Bind;
  */
 public class MemberHolder extends AVCommonViewHolder {
 
-  @Bind(R.id.member_item_name)
-  public TextView mTextView;
+    @Bind(R.id.member_item_name)
+    public TextView mTextView;
 
-  public MemberHolder(Context context, ViewGroup root) {
-    super(context, root, R.layout.activity_member_item);
-  }
+    public MemberHolder(Context context, ViewGroup root) {
+        super(context, root, R.layout.activity_member_item);
+    }
 
-  @Override
-  public void bindData(Object o) {
-    final MembersAdapter.MemberItem item = (MembersAdapter.MemberItem) o;
-    mTextView.setText(item.content);
-    itemView.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        Activity host = (Activity) itemView.getContext();
-        Intent intent = new Intent(host, AVSingleChatActivity.class);
-        intent.putExtra(Constants.MEMBER_ID, item.content);
-        host.startActivity(intent);
-      }
-    });
-  }
+    @Override
+    public void bindData(Object o) {
+        final MembersAdapter.MemberItem item = (MembersAdapter.MemberItem) o;
+        mTextView.setText(item.content);
+        itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Activity host = (Activity) itemView.getContext();
+                Intent intent = new Intent(host, AVSingleChatActivity.class);
+                intent.putExtra(Constants.MEMBER_ID, item.content);
+                host.startActivity(intent);
+            }
+        });
+    }
 }

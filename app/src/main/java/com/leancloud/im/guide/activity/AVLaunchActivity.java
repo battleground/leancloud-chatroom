@@ -12,21 +12,21 @@ import com.leancloud.im.guide.R;
  */
 public class AVLaunchActivity extends AVBaseActivity {
 
-  @Override
-  protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    Debug.anchor("程序启动...");
-    setContentView(R.layout.activity_launch);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Debug.anchor("程序启动...");
+        setContentView(R.layout.activity_launch);
 
-    /**
-     * 默认等待 1.5 秒后跳转到登陆页面
-     */
-    new Handler().postDelayed(new Runnable() {
-      @Override
-      public void run() {
-        startActivity(AVLoginActivity.class);
-        finish();
-      }
-    }, 1500);
-  }
+        /**
+         * 默认等待 1.5 秒后跳转到登陆页面
+         */
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                startActivity(AVLoginActivity.class);
+                finish();
+            }
+        }, 1500);
+    }
 }

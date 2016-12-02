@@ -29,6 +29,7 @@
         android:background="@android:color/white"
         android:gravity="center_vertical"
         android:maxLength="50"
+        android:hint="输入用户名..."
         android:paddingLeft="30dp"
         android:singleLine="true"
         android:textAppearance="@style/TextAppearance.Normal"

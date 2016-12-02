@@ -7,6 +7,6 @@ import com.avos.avoscloud.im.v2.AVIMTypedMessage;
  * Created by wli on 15/8/23.
  */
 public class ImTypeMessageEvent {
-  public AVIMTypedMessage message;
-  public AVIMConversation conversation;
+    public AVIMTypedMessage message;
+    public AVIMConversation conversation;
 }

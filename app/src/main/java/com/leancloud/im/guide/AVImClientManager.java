@@ -10,35 +10,35 @@ import com.avos.avoscloud.im.v2.callback.AVIMClientCallback;
  */
 public class AVImClientManager {
 
-  private static AVImClientManager imClientManager;
+    private static AVImClientManager imClientManager;
 
-  private AVIMClient avimClient;
-  private String clientId;
+    private AVIMClient avimClient;
+    private String clientId;
 
-  public synchronized static AVImClientManager getInstance() {
-    if (null == imClientManager) {
-      imClientManager = new AVImClientManager();
+    public synchronized static AVImClientManager getInstance() {
+        if (null == imClientManager) {
+            imClientManager = new AVImClientManager();
+        }
+        return imClientManager;
     }
-    return imClientManager;
-  }
 
-  private AVImClientManager() {
-  }
-
-  public void open(String clientId, AVIMClientCallback callback) {
-    this.clientId = clientId;
-    avimClient = AVIMClient.getInstance(clientId);
-    avimClient.open(callback);
-  }
-
-  public AVIMClient getClient() {
-    return avimClient;
-  }
-
-  public String getClientId() {
-    if (TextUtils.isEmpty(clientId)) {
-      throw new IllegalStateException("Please call AVImClientManager.open first");
+    private AVImClientManager() {
     }
-    return clientId;
-  }
+
+    public void open(String clientId, AVIMClientCallback callback) {
+        this.clientId = clientId;
+        avimClient = AVIMClient.getInstance(clientId);
+        avimClient.open(callback);
+    }
+
+    public AVIMClient getClient() {
+        return avimClient;
+    }
+
+    public String getClientId() {
+        if (TextUtils.isEmpty(clientId)) {
+            throw new IllegalStateException("Please call AVImClientManager.open first");
+        }
+        return clientId;
+    }
 }

@@ -6,10 +6,12 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.leancloud.im.guide.event.MemberLetterEvent;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import de.greenrobot.event.EventBus;
 
 
@@ -21,59 +23,59 @@ import de.greenrobot.event.EventBus;
  */
 public class LetterView extends LinearLayout {
 
-  public LetterView(Context context) {
-    super(context);
-    setOrientation(VERTICAL);
-    updateLetters();
-  }
-
-  public LetterView(Context context, AttributeSet attrs) {
-    super(context, attrs);
-    setOrientation(VERTICAL);
-    updateLetters();
-  }
-
-  private void updateLetters() {
-    setLetters(getSortLetters());
-  }
-
-  /**
-   * 设置快速滑动的字母集合
-   */
-  public void setLetters(List<Character> letters) {
-    removeAllViews();
-    for(Character content : letters) {
-      TextView view = new TextView(getContext());
-      view.setText(content.toString());
-      addView(view);
+    public LetterView(Context context) {
+        super(context);
+        setOrientation(VERTICAL);
+        updateLetters();
     }
 
-    setOnTouchListener(new OnTouchListener() {
-      @Override
-      public boolean onTouch(View v, MotionEvent event) {
-        int x = Math.round(event.getX());
-        int y = Math.round(event.getY());
-        for (int i = 0; i < getChildCount(); i++) {
-          TextView child = (TextView) getChildAt(i);
-          if (y > child.getTop() && y < child.getBottom()) {
-            MemberLetterEvent letterEvent = new MemberLetterEvent();
-            letterEvent.letter = child.getText().toString().charAt(0);
-            EventBus.getDefault().post(letterEvent);
-          }
+    public LetterView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        setOrientation(VERTICAL);
+        updateLetters();
+    }
+
+    private void updateLetters() {
+        setLetters(getSortLetters());
+    }
+
+    /**
+     * 设置快速滑动的字母集合
+     */
+    public void setLetters(List<Character> letters) {
+        removeAllViews();
+        for (Character content : letters) {
+            TextView view = new TextView(getContext());
+            view.setText(content.toString());
+            addView(view);
         }
-        return true;
-      }
-    });
-  }
 
-  /**
-   * 默认的只包含 A-Z 的字母
-   */
-  private List<Character> getSortLetters() {
-    List<Character> letterList = new ArrayList<Character>();
-    for (char c = 'A'; c <= 'Z'; c++) {
-      letterList.add(c);
+        setOnTouchListener(new OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                int x = Math.round(event.getX());
+                int y = Math.round(event.getY());
+                for (int i = 0; i < getChildCount(); i++) {
+                    TextView child = (TextView) getChildAt(i);
+                    if (y > child.getTop() && y < child.getBottom()) {
+                        MemberLetterEvent letterEvent = new MemberLetterEvent();
+                        letterEvent.letter = child.getText().toString().charAt(0);
+                        EventBus.getDefault().post(letterEvent);
+                    }
+                }
+                return true;
+            }
+        });
     }
-    return letterList;
-  }
+
+    /**
+     * 默认的只包含 A-Z 的字母
+     */
+    private List<Character> getSortLetters() {
+        List<Character> letterList = new ArrayList<Character>();
+        for (char c = 'A'; c <= 'Z'; c++) {
+            letterList.add(c);
+        }
+        return letterList;
+    }
 }

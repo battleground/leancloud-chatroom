@@ -31,131 +31,131 @@ import butterknife.Bind;
  */
 public class AVSquareMembersActivity extends AVBaseActivity {
 
-  @Bind(R.id.toolbar)
-  protected Toolbar toolbar;
+    @Bind(R.id.toolbar)
+    protected Toolbar toolbar;
 
-  @Bind(R.id.activity_square_members_srl_list)
-  protected SwipeRefreshLayout refreshLayout;
+    @Bind(R.id.activity_square_members_srl_list)
+    protected SwipeRefreshLayout refreshLayout;
 
-  @Bind(R.id.activity_square_members_letterview)
-  protected LetterView letterView;
+    @Bind(R.id.activity_square_members_letterview)
+    protected LetterView letterView;
 
-  @Bind(R.id.activity_square_members_rv_list)
-  protected RecyclerView recyclerView;
+    @Bind(R.id.activity_square_members_rv_list)
+    protected RecyclerView recyclerView;
 
-  private SearchView searchView;
+    private SearchView searchView;
 
-  private MembersAdapter itemAdapter;
-  private AVIMConversation conversation;
-  LinearLayoutManager layoutManager;
-  private List<String> memberList;
+    private MembersAdapter itemAdapter;
+    private AVIMConversation conversation;
+    LinearLayoutManager layoutManager;
+    private List<String> memberList;
 
-  @Override
-  protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_square_members);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_square_members);
 
-    setSupportActionBar(toolbar);
-    toolbar.setNavigationIcon(R.drawable.btn_navigation_back);
-    toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        onBackPressed();
-      }
-    });
-    setTitle(R.string.square_member_title);
-
-    layoutManager = new LinearLayoutManager(this);
-    recyclerView.setLayoutManager(layoutManager);
-
-    itemAdapter = new MembersAdapter();
-    recyclerView.setAdapter(itemAdapter);
-
-    refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-      @Override
-      public void onRefresh() {
-        conversation.fetchInfoInBackground(new AVIMConversationCallback() {
-          @Override
-          public void done(AVIMException e) {
-            if (filterException(e)) {
-              getMembers();
+        setSupportActionBar(toolbar);
+        toolbar.setNavigationIcon(R.drawable.btn_navigation_back);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
             }
-            refreshLayout.setRefreshing(false);
-          }
         });
-      }
-    });
-    getMembers();
-  }
+        setTitle(R.string.square_member_title);
 
-  @Override
-  public boolean onCreateOptionsMenu(Menu menu) {
-    getMenuInflater().inflate(R.menu.activity_member_menu, menu);
+        layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
 
-    searchView = (SearchView) menu.findItem(R.id.activity_member_menu_search).getActionView();
-    searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-      @Override
-      public boolean onQueryTextSubmit(String query) {
-        return false;
-      }
+        itemAdapter = new MembersAdapter();
+        recyclerView.setAdapter(itemAdapter);
 
-      @Override
-      public boolean onQueryTextChange(String newText) {
-        itemAdapter.setMemberList(filterMembers(newText));
-        itemAdapter.notifyDataSetChanged();
-        return false;
-      }
-    });
-    return true;
-  }
-
-  /**
-   * 在 memberList 里匹配搜索结果
-   */
-  private List<String> filterMembers(String content) {
-    List<String> members = new ArrayList<String>();
-    for (String name : memberList) {
-      if (name.contains(content)) {
-        members.add(name);
-      }
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                conversation.fetchInfoInBackground(new AVIMConversationCallback() {
+                    @Override
+                    public void done(AVIMException e) {
+                        if (filterException(e)) {
+                            getMembers();
+                        }
+                        refreshLayout.setRefreshing(false);
+                    }
+                });
+            }
+        });
+        getMembers();
     }
-    return members;
-  }
 
-  /**
-   * 从 AVIMConversation 获取 member，如果本地没有则做拉取请求，然后更新 UI
-   */
-  private void getMembers() {
-    conversation = AVImClientManager.getInstance().getClient().getConversation(Constants.SQUARE_CONVERSATION_ID);
-    memberList = conversation.getMembers();
-    if (null != memberList && memberList.size() > 0) {
-      itemAdapter.setMemberList(memberList);
-      itemAdapter.notifyDataSetChanged();
-    } else {
-      conversation.fetchInfoInBackground(new AVIMConversationCallback() {
-        @Override
-        public void done(AVIMException e) {
-          if (filterException(e)) {
-            memberList = conversation.getMembers();
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.activity_member_menu, menu);
+
+        searchView = (SearchView) menu.findItem(R.id.activity_member_menu_search).getActionView();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                itemAdapter.setMemberList(filterMembers(newText));
+                itemAdapter.notifyDataSetChanged();
+                return false;
+            }
+        });
+        return true;
+    }
+
+    /**
+     * 在 memberList 里匹配搜索结果
+     */
+    private List<String> filterMembers(String content) {
+        List<String> members = new ArrayList<String>();
+        for (String name : memberList) {
+            if (name.contains(content)) {
+                members.add(name);
+            }
+        }
+        return members;
+    }
+
+    /**
+     * 从 AVIMConversation 获取 member，如果本地没有则做拉取请求，然后更新 UI
+     */
+    private void getMembers() {
+        conversation = AVImClientManager.getInstance().getClient().getConversation(Constants.SQUARE_CONVERSATION_ID);
+        memberList = conversation.getMembers();
+        if (null != memberList && memberList.size() > 0) {
             itemAdapter.setMemberList(memberList);
             itemAdapter.notifyDataSetChanged();
-          }
+        } else {
+            conversation.fetchInfoInBackground(new AVIMConversationCallback() {
+                @Override
+                public void done(AVIMException e) {
+                    if (filterException(e)) {
+                        memberList = conversation.getMembers();
+                        itemAdapter.setMemberList(memberList);
+                        itemAdapter.notifyDataSetChanged();
+                    }
+                }
+            });
         }
-      });
     }
-  }
 
-  /**
-   * 处理 LetterView 发送过来的 MemberLetterEvent
-   * 会通过 MembersAdapter 获取应该要跳转到的位置，然后跳转
-   */
-  public void onEvent(MemberLetterEvent event) {
-    Character targetChar = Character.toLowerCase(event.letter);
-    if (itemAdapter.getIndexMap().containsKey(targetChar)) {
-      int index = itemAdapter.getIndexMap().get(targetChar);
-      if (index > 0 && index < itemAdapter.getItemCount()) {
-        layoutManager.scrollToPositionWithOffset(index, 0);
-      }
+    /**
+     * 处理 LetterView 发送过来的 MemberLetterEvent
+     * 会通过 MembersAdapter 获取应该要跳转到的位置，然后跳转
+     */
+    public void onEvent(MemberLetterEvent event) {
+        Character targetChar = Character.toLowerCase(event.letter);
+        if (itemAdapter.getIndexMap().containsKey(targetChar)) {
+            int index = itemAdapter.getIndexMap().get(targetChar);
+            if (index > 0 && index < itemAdapter.getItemCount()) {
+                layoutManager.scrollToPositionWithOffset(index, 0);
+            }
+        }
     }
-  }
 }
