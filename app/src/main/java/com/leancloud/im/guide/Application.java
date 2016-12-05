@@ -1,6 +1,7 @@
 package com.leancloud.im.guide;
 
 import com.abooc.util.Debug;
+import com.abooc.widget.Toast;
 import com.avos.avoscloud.AVOSCloud;
 import com.avos.avoscloud.im.v2.AVIMMessageManager;
 import com.avos.avoscloud.im.v2.AVIMTypedMessage;
@@ -14,6 +15,7 @@ public class Application extends android.app.Application {
     public void onCreate() {
         Debug.enable(BuildConfig.DEBUG);
         super.onCreate();
+        Toast.init(this);
 
         // 这是使用美国节点的 app 信息，如果不使用美国节点，请 comment 这两行
 //    AVOSCloud.useAVCloudUS();

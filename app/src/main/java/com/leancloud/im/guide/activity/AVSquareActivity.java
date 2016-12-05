@@ -1,5 +1,6 @@
 package com.leancloud.im.guide.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -8,6 +9,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.abooc.util.Debug;
+import com.abooc.widget.Toast;
 import com.avos.avoscloud.im.v2.AVIMClient;
 import com.avos.avoscloud.im.v2.AVIMConversation;
 import com.avos.avoscloud.im.v2.AVIMConversationQuery;
@@ -37,16 +40,13 @@ public class AVSquareActivity extends AVBaseActivity {
     private ChatFragment chatFragment;
     private Toolbar toolbar;
 
-    /**
-     * 上一次点击 back 键的时间
-     * 用于双击退出的判断
-     */
-    private static long lastBackTime = 0;
 
-    /**
-     * 当双击 back 键在此间隔内是直接触发 onBackPressed
-     */
-    private final int BACK_INTERVAL = 1000;
+    public static void launch(Activity activity, String conversationId, String name) {
+        Intent intent = new Intent(activity, AVSquareActivity.class);
+        intent.putExtra(Constants.CONVERSATION_ID, conversationId);
+        intent.putExtra(Constants.ACTIVITY_TITLE, name);
+        activity.startActivityForResult(intent, 0);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +55,7 @@ public class AVSquareActivity extends AVBaseActivity {
 
         String conversationId = getIntent().getStringExtra(Constants.CONVERSATION_ID);
         String title = getIntent().getStringExtra(Constants.ACTIVITY_TITLE);
+        Debug.error(title);
 
         chatFragment = (ChatFragment) getFragmentManager().findFragmentById(R.id.fragment_chat);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -64,13 +65,19 @@ public class AVSquareActivity extends AVBaseActivity {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AVSquareActivity.super.onBackPressed();
+                onBackPressed();
             }
         });
         setTitle(title);
 
         getSquare(conversationId);
         queryInSquare(conversationId);
+    }
+
+    @Override
+    public void setTitle(CharSequence title) {
+        super.setTitle(title);
+        Debug.anchor(title);
     }
 
     @Override
@@ -81,22 +88,18 @@ public class AVSquareActivity extends AVBaseActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        String conversationId = getIntent().getStringExtra(Constants.CONVERSATION_ID);
-        Intent intent = new Intent(this, AVSquareMembersActivity.class);
-        intent.putExtra(Constants.CONVERSATION_ID, conversationId);
-        startActivity(intent);
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onBackPressed() {
-        long currentTime = System.currentTimeMillis();
-        if (currentTime - lastBackTime < BACK_INTERVAL) {
-            super.onBackPressed();
-        } else {
-            showToast("双击 back 退出");
+        switch (item.getItemId()) {
+            case R.id.menu_square_members:
+                String conversationId = getIntent().getStringExtra(Constants.CONVERSATION_ID);
+                Intent intent = new Intent(this, AVSquareMembersActivity.class);
+                intent.putExtra(Constants.CONVERSATION_ID, conversationId);
+                startActivity(intent);
+                break;
+            case R.id.menu_square_quit:
+                quit();
+                break;
         }
-        lastBackTime = currentTime;
+        return super.onOptionsItemSelected(item);
     }
 
     /**
@@ -159,5 +162,25 @@ public class AVSquareActivity extends AVBaseActivity {
         Intent intent = new Intent(this, AVSingleChatActivity.class);
         intent.putExtra(Constants.MEMBER_ID, event.userId);
         startActivity(intent);
+    }
+
+    /**
+     * 退出会话
+     */
+    public void quit() {
+        if (squareConversation != null) {
+            squareConversation.quit(new AVIMConversationCallback() {
+                @Override
+                public void done(AVIMException e) {
+                    if (e == null) {
+                        //退出成功
+                        setResult(RESULT_OK);
+                        AVSquareActivity.super.onBackPressed();
+                    } else {
+                        Toast.show("未退出会话！");
+                    }
+                }
+            });
+        }
     }
 }

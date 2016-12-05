@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item
-        android:id="@+id/menu_square_members"
-        android:icon="@drawable/btn_square_members"
-        android:orderInCategory="100"
-        android:title="members"
-        app:showAsAction="always" />
 
     <item
-        android:id="@+id/menu_square_quit"
+        android:id="@+id/menu_chat_rooms_join"
+        android:icon="@android:drawable/ic_menu_add"
         android:orderInCategory="100"
-        android:title="退出聊天室"
+        android:title="加入会话"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/menu_chat_rooms_refresh"
+        android:orderInCategory="100"
+        android:title="刷新"
         app:showAsAction="never" />
 </menu>

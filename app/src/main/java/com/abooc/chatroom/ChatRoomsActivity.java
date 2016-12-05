@@ -1,9 +1,12 @@
 package com.abooc.chatroom;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.avos.avoscloud.im.v2.AVIMClient;
 import com.avos.avoscloud.im.v2.AVIMException;
@@ -24,12 +27,14 @@ public class ChatRoomsActivity extends BlankActivity {
         ctx.startActivity(intent);
     }
 
+    String memberId;
+    ChatRoomListFragment fragment;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        final String memberId = getIntent().getStringExtra(Constants.MEMBER_ID);
+        memberId = getIntent().getStringExtra(Constants.MEMBER_ID);
 
         AVImClientManager.getInstance().open(memberId, new AVIMClientCallback() {
             @Override
@@ -44,10 +49,36 @@ public class ChatRoomsActivity extends BlankActivity {
 
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        ChatRoomListFragment fragment = new ChatRoomListFragment();
+        fragment = new ChatRoomListFragment();
         Bundle bundle = new Bundle();
         bundle.putString(Constants.MEMBER_ID, memberId);
         fragment.setArguments(bundle);
         transaction.add(R.id.FrameLayout, fragment).commit();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_chat_rooms, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_chat_rooms_refresh:
+                fragment.clear();
+                fragment.queryConversations(memberId);
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            fragment.queryConversations(memberId);
+        }
+
     }
 }

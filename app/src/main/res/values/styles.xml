@@ -7,9 +7,15 @@
         <item name="colorPrimaryDark">@color/common_blue</item>
         <item name="colorAccent">@color/common_blue</item>
         <item name="android:textColorPrimary">@android:color/white</item>
+        <item name="subtitleTextStyle">@style/Toolbar.Subtitle</item>
     </style>
 
-    <style name="AVActivity" parent="AppTheme"/>
+    <style name="Toolbar.Subtitle" parent="Base.TextAppearance.Widget.AppCompat.Toolbar.Subtitle">
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
+
+    <style name="AVActivity" parent="AppTheme" />
 
     <style name="AVActivity.FullScreen">
         <item name="android:windowFullscreen">true</item>
@@ -30,7 +36,7 @@
         <item name="android:layout_width">wrap_content</item>
     </style>
 
-    <style name="AVTheme" parent="Theme.AppCompat.Light"/>
+    <style name="AVTheme" parent="Theme.AppCompat.Light" />
 
     <style name="DividerLine">
         <item name="android:background">@color/divider_line_color</item>
@@ -60,11 +66,11 @@
 
     <style name="Button"></style>
 
-    <style name="Button.Normal"/>
+    <style name="Button.Normal" />
 
     <style name="Button.Larger"></style>
 
-    <style name="TextAppearance"/>
+    <style name="TextAppearance" />
 
     <style name="TextAppearance.Large">
         <item name="android:textSize">@dimen/textsize_large</item>

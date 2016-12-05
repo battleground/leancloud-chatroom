@@ -1,9 +1,56 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.abooc.chatroom.ChatRoomListFragment">
+    android:orientation="vertical">
 
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="6dp"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/EditText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:hint="会话ID"
+            android:padding="12dp"
+            android:text="583f9947128fe1005890e7cf"
+            android:textColor="#888" />
+
+        <Button
+            android:id="@+id/Join"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="6dp"
+            android:focusableInTouchMode="true"
+            android:padding="6dp"
+            android:text="加入" />
+    </LinearLayout>
+
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="#CCC" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="12dp"
+        android:layout_marginTop="12dp"
+        android:text="已加入会话：" />
+
+    <TextView
+        android:id="@+id/Empty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="暂无会话！"
+        android:textColor="#CCC"
+        android:textSize="43sp" />
 
     <ListView
         android:id="@+id/ListView"
@@ -11,4 +58,4 @@
         android:layout_height="match_parent" />
 
 
-</FrameLayout>
+</LinearLayout>

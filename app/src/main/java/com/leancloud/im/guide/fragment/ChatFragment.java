@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -126,7 +127,8 @@ public class ChatFragment extends Fragment {
                 public void done(Integer count, AVIMException e) {
                     if (e == null) {
                         Debug.error("conversation got " + count + " members");
-                        getActivity().setTitle(getActivity().getTitle() + " - 在线成员：" + count);
+                        AppCompatActivity appCompatActivity = (AppCompatActivity) getActivity();
+                        appCompatActivity.getSupportActionBar().setSubtitle("在线成员：" + count);
                     }
                 }
             });

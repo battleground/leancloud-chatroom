@@ -37,12 +37,7 @@
 
         <activity
             android:name="com.abooc.chatroom.ChatRoomsActivity"
-            android:label="所有会话">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:label="所有会话" />
 
         <activity
             android:name="com.abooc.chatroom.BlankActivity"

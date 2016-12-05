@@ -6,21 +6,26 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.abooc.util.Debug;
+import com.abooc.widget.Toast;
 import com.alibaba.fastjson.JSONArray;
 import com.avos.avoscloud.im.v2.AVIMClient;
 import com.avos.avoscloud.im.v2.AVIMConversation;
 import com.avos.avoscloud.im.v2.AVIMConversationQuery;
 import com.avos.avoscloud.im.v2.AVIMException;
 import com.avos.avoscloud.im.v2.callback.AVIMClientCallback;
+import com.avos.avoscloud.im.v2.callback.AVIMConversationCallback;
 import com.avos.avoscloud.im.v2.callback.AVIMConversationQueryCallback;
 import com.leancloud.im.guide.Constants;
 import com.leancloud.im.guide.R;
@@ -34,6 +39,7 @@ public class ChatRoomListFragment extends Fragment {
 
     String memberId;
 
+    TextView mEmptyView;
     ListView mListView;
     final ListAdapter mListAdapter = new ListAdapter();
 
@@ -58,7 +64,25 @@ public class ChatRoomListFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 
+        mEmptyView = (TextView) view.findViewById(R.id.Empty);
         mListView = (ListView) view.findViewById(R.id.ListView);
+        mListView.setEmptyView(mEmptyView);
+        final EditText mJoinEdit = (EditText) view.findViewById(R.id.EditText);
+
+
+        view.findViewById(R.id.Join).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Editable conversationId = mJoinEdit.getText();
+                Debug.error(conversationId);
+                if (TextUtils.isEmpty(conversationId)) {
+                    return;
+                } else {
+                    join(conversationId.toString());
+                }
+            }
+        });
         mListView.setAdapter(mListAdapter);
 
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -73,8 +97,14 @@ public class ChatRoomListFragment extends Fragment {
             }
         });
 
+        clear();
         queryConversations(memberId);
 
+    }
+
+    public void clear() {
+        mEmptyView.setText("Loading...");
+        mListAdapter.clear();
     }
 
     public void queryConversations(String memberId) {
@@ -113,6 +143,44 @@ public class ChatRoomListFragment extends Fragment {
         });
     }
 
+    /**
+     * 加入会话
+     *
+     * @param conversationId
+     */
+    public void join(String conversationId) {
+        AVIMClient client = AVIMClient.getInstance(memberId);
+        AVIMConversationQuery query = client.getQuery();
+        query.whereEqualTo("objectId", conversationId);
+        query.findInBackground(new AVIMConversationQueryCallback() {
+            @Override
+            public void done(List<AVIMConversation> convs, AVIMException e) {
+                if (e == null) {
+                    if (convs != null && !convs.isEmpty()) {
+                        final AVIMConversation conversation = convs.get(0); //就是想要的conversation
+                        conversation.join(new AVIMConversationCallback() {
+                            @Override
+                            public void done(AVIMException e) {
+                                if (e == null) {
+                                    //加入成功
+                                    AVSquareActivity.launch(getActivity(),
+                                            conversation.getConversationId(),
+                                            conversation.getName());
+                                } else {
+                                    Toast.show("加入失败！");
+                                }
+                            }
+                        });
+                    } else {
+                        Toast.show("未找到聊天室！");
+                    }
+                } else {
+                    Toast.show("加入聊天室失败！");
+                }
+            }
+        });
+    }
+
 
     class ListAdapter extends BaseAdapter {
 
@@ -120,6 +188,11 @@ public class ChatRoomListFragment extends Fragment {
 
         public void update(List<AVIMConversation> convs) {
             this.convs = convs;
+            notifyDataSetChanged();
+        }
+
+        public void clear() {
+            this.convs.clear();
             notifyDataSetChanged();
         }
 
@@ -151,7 +224,7 @@ public class ChatRoomListFragment extends Fragment {
 
             int size = conversation.getMembers().size();
             textName.setText(conversation.getName());
-            textId.setText(conversation.getConversationId() + "  人数：" + size);
+            textId.setText(conversation.getConversationId() + "  在线成员：" + size);
             return view;
         }
     }
