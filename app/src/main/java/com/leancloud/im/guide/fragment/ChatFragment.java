@@ -12,10 +12,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.abooc.util.Debug;
 import com.avos.avoscloud.im.v2.AVIMConversation;
 import com.avos.avoscloud.im.v2.AVIMException;
 import com.avos.avoscloud.im.v2.AVIMMessage;
 import com.avos.avoscloud.im.v2.callback.AVIMConversationCallback;
+import com.avos.avoscloud.im.v2.callback.AVIMConversationMemberCountCallback;
 import com.avos.avoscloud.im.v2.callback.AVIMMessagesQueryCallback;
 import com.avos.avoscloud.im.v2.messages.AVIMTextMessage;
 import com.leancloud.im.guide.AVInputBottomBar;
@@ -116,6 +118,18 @@ public class ChatFragment extends Fragment {
             inputBottomBar.setTag(imConversation.getConversationId());
             fetchMessages();
             NotificationUtils.addTag(conversation.getConversationId());
+
+
+            imConversation.getMemberCount(new AVIMConversationMemberCountCallback() {
+
+                @Override
+                public void done(Integer count, AVIMException e) {
+                    if (e == null) {
+                        Debug.error("conversation got " + count + " members");
+                        getActivity().setTitle(getActivity().getTitle() + " - 在线成员：" + count);
+                    }
+                }
+            });
         }
     }
 

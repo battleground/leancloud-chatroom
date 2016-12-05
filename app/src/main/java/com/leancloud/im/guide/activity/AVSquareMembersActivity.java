@@ -50,9 +50,15 @@ public class AVSquareMembersActivity extends AVBaseActivity {
     LinearLayoutManager layoutManager;
     private List<String> memberList;
 
+    String conversationId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
+        conversationId = getIntent().getStringExtra(Constants.CONVERSATION_ID);
+
         setContentView(R.layout.activity_square_members);
 
         setSupportActionBar(toolbar);
@@ -126,7 +132,7 @@ public class AVSquareMembersActivity extends AVBaseActivity {
      * 从 AVIMConversation 获取 member，如果本地没有则做拉取请求，然后更新 UI
      */
     private void getMembers() {
-        conversation = AVImClientManager.getInstance().getClient().getConversation(Constants.SQUARE_CONVERSATION_ID);
+        conversation = AVImClientManager.getInstance().getClient().getConversation(conversationId);
         memberList = conversation.getMembers();
         if (null != memberList && memberList.size() > 0) {
             itemAdapter.setMemberList(memberList);

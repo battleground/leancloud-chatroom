@@ -1,6 +1,5 @@
 package com.leancloud.im.guide.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -8,6 +7,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.abooc.chatroom.ChatRoomsActivity;
 import com.abooc.test.data.User;
 import com.abooc.test.data.UserLoader;
 import com.alibaba.fastjson.JSONArray;
@@ -15,7 +15,6 @@ import com.avos.avoscloud.im.v2.AVIMClient;
 import com.avos.avoscloud.im.v2.AVIMException;
 import com.avos.avoscloud.im.v2.callback.AVIMClientCallback;
 import com.leancloud.im.guide.AVImClientManager;
-import com.leancloud.im.guide.Constants;
 import com.leancloud.im.guide.R;
 
 import java.util.ArrayList;
@@ -66,7 +65,7 @@ public class AVLoginActivity extends AVBaseActivity {
         openClient(userNameView.getText().toString().trim());
     }
 
-    private void openClient(String selfId) {
+    private void openClient(final String selfId) {
         if (TextUtils.isEmpty(selfId)) {
             showToast(R.string.login_null_name_tip);
             return;
@@ -80,10 +79,13 @@ public class AVLoginActivity extends AVBaseActivity {
                 loginButton.setEnabled(true);
                 userNameView.setEnabled(true);
                 if (filterException(e)) {
-                    Intent intent = new Intent(AVLoginActivity.this, AVSquareActivity.class);
-                    intent.putExtra(Constants.CONVERSATION_ID, Constants.SQUARE_CONVERSATION_ID);
-                    intent.putExtra(Constants.ACTIVITY_TITLE, getString(R.string.square_name));
-                    startActivity(intent);
+//                    Intent intent = new Intent(AVLoginActivity.this, AVSquareActivity.class);
+//                    intent.putExtra(Constants.CONVERSATION_ID, Constants.SQUARE_CONVERSATION_ID);
+//                    intent.putExtra(Constants.ACTIVITY_TITLE, getString(R.string.square_name));
+//                    startActivity(intent);
+
+                    ChatRoomsActivity.launch(AVLoginActivity.this, selfId);
+
                     finish();
                 }
             }

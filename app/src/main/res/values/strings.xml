@@ -24,4 +24,7 @@
 
     <string name="unspport_message_type">暂不支持此消息类型</string>
     <string name="message_is_null">消息不能为空</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

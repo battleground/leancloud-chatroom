@@ -15,7 +15,8 @@ public class Constants {
 
 
     //  public static final String SQUARE_CONVERSATION_ID = "55cd829e60b2b52cda834469";
-    public static final String SQUARE_CONVERSATION_ID = "5836aa798ac2470065d35cd0";
+//    public static final String SQUARE_CONVERSATION_ID = "5836aa798ac2470065d35cd0";
+    public static final String SQUARE_CONVERSATION_ID = "5836b51a128fe178553f475e";
 
     private static String getPrefixConstant(String str) {
         return LEANMESSAGE_CONSTANTS_PREFIX + str;
