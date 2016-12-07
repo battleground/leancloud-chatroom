@@ -1,4 +1,4 @@
-package com.abooc.chatroom;
+package com.leancloud.im.guide.fragment;
 
 
 import android.content.Intent;

@@ -253,6 +253,7 @@ public class ChatFragment extends Fragment implements OnRecyclerItemChildClickLi
             message.setContent(sb.toString());
             mAdapter.addMessage(message);
             scrollToBottom();
+            getMemberCount();
         } else if (event.action == EventAction.REMOVE) { // 自己被踢出
             getActivity().finish();
         }

@@ -1,4 +1,4 @@
-package com.abooc.chatroom;
+package com.leancloud.im.guide.activity;
 
 import android.content.Context;
 import android.content.Intent;
@@ -7,6 +7,8 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.abooc.chatroom.BlankActivity;
+import com.leancloud.im.guide.fragment.ChatRoomListFragment;
 import com.leancloud.im.guide.AVIMClientManager;
 import com.leancloud.im.guide.R;
 

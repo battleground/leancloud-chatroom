@@ -7,7 +7,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.abooc.chatroom.ChatRoomsActivity;
 import com.abooc.test.data.User;
 import com.abooc.test.data.UserLoader;
 import com.abooc.util.Debug;

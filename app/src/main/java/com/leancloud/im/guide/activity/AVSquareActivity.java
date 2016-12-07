@@ -30,7 +30,7 @@ import java.util.List;
  * 广场页面，即群组聊天页面
  * <p>
  * 1、根据 clientId 获得 AVIMClient 实例
- * 2、根据 conversationId 获得 AVIMConversation 实例
+ * 2、根据 mConversationId 获得 AVIMConversation 实例
  * 3、必须要加入 conversation 后才能拉取消息
  */
 public class AVSquareActivity extends AVBaseActivity {
@@ -67,7 +67,7 @@ public class AVSquareActivity extends AVBaseActivity {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-//        toolbar.setNavigationIcon(R.drawable.btn_navigation_back);
+//        mToolbar.setNavigationIcon(R.drawable.btn_navigation_back);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -94,9 +94,7 @@ public class AVSquareActivity extends AVBaseActivity {
         switch (item.getItemId()) {
             case R.id.menu_square_members:
                 String conversationId = getIntent().getStringExtra(Constants.CONVERSATION_ID);
-                Intent intent = new Intent(this, AVSquareMembersActivity.class);
-                intent.putExtra(Constants.CONVERSATION_ID, conversationId);
-                startActivity(intent);
+                AVSquareMembersActivity.launch(this, conversationId);
                 break;
             case R.id.menu_square_quit:
                 quit();
@@ -106,11 +104,11 @@ public class AVSquareActivity extends AVBaseActivity {
     }
 
     /**
-     * 根据 conversationId 查取本地缓存中的 conversation，如若没有缓存，则返回一个新建的 conversaiton
+     * 根据 mConversationId 查取本地缓存中的 conversation，如若没有缓存，则返回一个新建的 conversaiton
      */
     private void getSquare(String conversationId) {
         if (TextUtils.isEmpty(conversationId)) {
-            throw new IllegalArgumentException("conversationId can not be null");
+            throw new IllegalArgumentException("mConversationId can not be null");
         }
 
         AVIMClient client = AVIMClientManager.getInstance().getClient();

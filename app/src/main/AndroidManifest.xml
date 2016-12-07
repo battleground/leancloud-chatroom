@@ -36,7 +36,7 @@
         </activity>
 
         <activity
-            android:name="com.abooc.chatroom.ChatRoomsActivity"
+            android:name=".activity.ChatRoomsActivity"
             android:label="所有会话" />
 
         <activity
