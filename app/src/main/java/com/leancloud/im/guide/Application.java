@@ -28,8 +28,7 @@ public class Application extends android.app.Application {
 //        "2e46velw0mqrq3hl2a047yjtpxn32frm0m253k258xo63ft9");
 
         // "直播间聊天系统" 测试key
-        AVOSCloud.initialize(this, "Ly7xoqX3c4P8hn7pYQoDaxXv-gzGzoHsz",
-                "KjaBxRRx7H6udI3VMRGde4tl");
+        AVOSCloud.initialize(this, "Ly7xoqX3c4P8hn7pYQoDaxXv-gzGzoHsz", "KjaBxRRx7H6udI3VMRGde4tl");
 
 
         // 必须在启动的时候注册 MessageHandler

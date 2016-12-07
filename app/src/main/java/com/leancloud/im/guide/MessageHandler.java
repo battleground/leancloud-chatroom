@@ -28,7 +28,7 @@ public class MessageHandler extends AVIMTypedMessageHandler<AVIMTypedMessage> {
 
         String clientID = "";
         try {
-            clientID = AVImClientManager.getInstance().getClientId();
+            clientID = AVIMClientManager.getInstance().getClientId();
             if (client.getClientId().equals(clientID)) {
 
                 // 过滤掉自己发的消息

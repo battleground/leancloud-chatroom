@@ -1,11 +1,8 @@
 package com.leancloud.im.guide.viewholder;
 
-import android.content.Context;
-import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.ViewGroup;
+import android.view.View;
 
-import butterknife.ButterKnife;
+import com.abooc.android.widget.ViewHolder;
 
 
 /**
@@ -15,15 +12,10 @@ import butterknife.ButterKnife;
  * 2、使用 ButterKnife，精简代码，提高代码阅读性
  */
 
-public abstract class AVCommonViewHolder<T> extends RecyclerView.ViewHolder {
+public abstract class AVCommonViewHolder<T> extends ViewHolder {
 
-    public AVCommonViewHolder(Context context, ViewGroup root, int layoutRes) {
-        super(LayoutInflater.from(context).inflate(layoutRes, root, false));
-        ButterKnife.bind(this, itemView);
-    }
-
-    public Context getContext() {
-        return itemView.getContext();
+    public AVCommonViewHolder(View itemLayoutView, OnRecyclerItemClickListener listener, OnRecyclerItemChildClickListener childListener) {
+        super(itemLayoutView, listener, childListener);
     }
 
     /**
@@ -31,7 +23,5 @@ public abstract class AVCommonViewHolder<T> extends RecyclerView.ViewHolder {
      */
     public abstract void bindData(T t);
 
-    public void setData(T t) {
-        bindData(t);
-    }
+    public abstract void showTimeView(boolean isShow);
 }

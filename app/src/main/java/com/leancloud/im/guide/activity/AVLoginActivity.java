@@ -10,11 +10,13 @@ import android.widget.TextView;
 import com.abooc.chatroom.ChatRoomsActivity;
 import com.abooc.test.data.User;
 import com.abooc.test.data.UserLoader;
-import com.alibaba.fastjson.JSONArray;
+import com.abooc.util.Debug;
+import com.abooc.widget.Toast;
+import com.alibaba.fastjson.JSON;
 import com.avos.avoscloud.im.v2.AVIMClient;
 import com.avos.avoscloud.im.v2.AVIMException;
 import com.avos.avoscloud.im.v2.callback.AVIMClientCallback;
-import com.leancloud.im.guide.AVImClientManager;
+import com.leancloud.im.guide.AVIMClientManager;
 import com.leancloud.im.guide.R;
 
 import java.util.ArrayList;
@@ -53,8 +55,10 @@ public class AVLoginActivity extends AVBaseActivity {
             @Override
             public void onGet(ArrayList<User> users) {
 
-                Object toJSON = JSONArray.toJSON(users);
-                logText.setText(toJSON.toString());
+//                Object toJSON = JSONArray.toJSON(users);
+                String text = JSON.toJSONString(users);
+                Debug.out("content:\n" + text);
+                logText.setText(text);
             }
         });
 
@@ -65,7 +69,7 @@ public class AVLoginActivity extends AVBaseActivity {
         openClient(userNameView.getText().toString().trim());
     }
 
-    private void openClient(final String selfId) {
+    private void openClient(String selfId) {
         if (TextUtils.isEmpty(selfId)) {
             showToast(R.string.login_null_name_tip);
             return;
@@ -73,21 +77,17 @@ public class AVLoginActivity extends AVBaseActivity {
 
         loginButton.setEnabled(false);
         userNameView.setEnabled(false);
-        AVImClientManager.getInstance().open(selfId, new AVIMClientCallback() {
+        AVIMClientManager.getInstance().open(selfId, new AVIMClientCallback() {
             @Override
             public void done(AVIMClient avimClient, AVIMException e) {
                 loginButton.setEnabled(true);
                 userNameView.setEnabled(true);
-                if (filterException(e)) {
-//                    Intent intent = new Intent(AVLoginActivity.this, AVSquareActivity.class);
-//                    intent.putExtra(Constants.CONVERSATION_ID, Constants.SQUARE_CONVERSATION_ID);
-//                    intent.putExtra(Constants.ACTIVITY_TITLE, getString(R.string.square_name));
-//                    startActivity(intent);
-
-                    ChatRoomsActivity.launch(AVLoginActivity.this, selfId);
-
-                    finish();
+                if (Debug.printStackTrace(e)) {
+                    Toast.show("登录失败");
+                    return;
                 }
+                ChatRoomsActivity.launch(AVLoginActivity.this);
+                finish();
             }
         });
     }

@@ -1,6 +1,5 @@
 package com.abooc.chatroom;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,11 +7,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.avos.avoscloud.im.v2.AVIMClient;
-import com.avos.avoscloud.im.v2.AVIMException;
-import com.avos.avoscloud.im.v2.callback.AVIMClientCallback;
-import com.leancloud.im.guide.AVImClientManager;
-import com.leancloud.im.guide.Constants;
+import com.leancloud.im.guide.AVIMClientManager;
 import com.leancloud.im.guide.R;
 
 /**
@@ -21,38 +16,28 @@ import com.leancloud.im.guide.R;
 
 public class ChatRoomsActivity extends BlankActivity {
 
-    public static void launch(Context ctx, String memberId) {
+    public static void launch(Context ctx) {
         Intent intent = new Intent(ctx, ChatRoomsActivity.class);
-        intent.putExtra(Constants.MEMBER_ID, memberId);
+//        intent.putExtra(Constants.MEMBER_ID, memberId);
         ctx.startActivity(intent);
     }
 
-    String memberId;
+//    String memberId;
     ChatRoomListFragment fragment;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        memberId = getIntent().getStringExtra(Constants.MEMBER_ID);
-
-        AVImClientManager.getInstance().open(memberId, new AVIMClientCallback() {
-            @Override
-            public void done(AVIMClient avimClient, AVIMException e) {
-                if (e == null) {
-                    getSupportActionBar().setSubtitle(memberId + " - " + "在线");
-                } else {
-                    getSupportActionBar().setSubtitle(memberId + " - " + "登录失败：" + e);
-                }
-            }
-        });
-
+//        memberId = getIntent().getStringExtra(Constants.MEMBER_ID);
+        String memberId = AVIMClientManager.getInstance().getClientId();
+        getSupportActionBar().setSubtitle(memberId + " - " + "在线");
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         fragment = new ChatRoomListFragment();
-        Bundle bundle = new Bundle();
-        bundle.putString(Constants.MEMBER_ID, memberId);
-        fragment.setArguments(bundle);
+//        Bundle bundle = new Bundle();
+//        bundle.putString(Constants.MEMBER_ID, memberId);
+//        fragment.setArguments(bundle);
         transaction.add(R.id.FrameLayout, fragment).commit();
     }
 
@@ -67,7 +52,7 @@ public class ChatRoomsActivity extends BlankActivity {
         switch (item.getItemId()) {
             case R.id.menu_chat_rooms_refresh:
                 fragment.clear();
-                fragment.queryConversations(memberId);
+                fragment.queryConversations();
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -77,8 +62,7 @@ public class ChatRoomsActivity extends BlankActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
-            fragment.queryConversations(memberId);
+            fragment.queryConversations();
         }
-
     }
 }

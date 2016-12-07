@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- color 颜色 -->
+    <color name="red">#ff0000</color> <!-- 红色 -->
+    <color name="orange">#ff6600</color> <!-- 橙色 -->
+    <color name="yellow">#ffff00</color> <!-- 黄色 -->
+    <color name="green">#00ff00</color> <!-- 绿色 -->
+    <color name="cyan">#00ffff</color> <!-- 青色 -->
+    <color name="blue">#0000ff</color> <!-- 蓝色 -->
+    <color name="purple">#800080</color> <!-- 紫色 -->
+    <color name="pink">#FFC0CB</color> <!-- 粉色 -->
+    <color name="magenta">#FF00FF</color> <!-- 洋红 -->
+    <color name="white">#ffffff</color> <!-- 白色 -->
+    <color name="black">#000000</color> <!-- 黑色 -->
+
+    <color name="transparent">#00000000</color> <!-- 透明 -->
+    <color name="transparent_96">#64FFFFFF</color> <!-- 96%透明白 -->
+
+    <color name="gray_10">#eeeeee</color> <!-- 10%灰 -->
+    <color name="gray_15">#e5e5e5</color> <!-- 15%灰 -->
+    <color name="gray_20">#dcdcdc</color> <!-- 20%灰 -->
+    <color name="gray_25">#d2d2d2</color> <!-- 25%灰 -->
+    <color name="gray_30">#c9c9c9</color> <!-- 30%灰 -->
+    <color name="gray_35">#bfbfbf</color> <!-- 35%灰 -->
+    <color name="gray_40">#b5b5b5</color> <!-- 40%灰 -->
+    <color name="gray_45">#aaaaaa</color> <!-- 45%灰 -->
+    <color name="gray_50">#a0a0a0</color> <!-- 50%灰 -->
+    <color name="gray_55">#959595</color> <!-- 55%灰 -->
+    <color name="gray_60">#898989</color> <!-- 60%灰 -->
+    <color name="gray_65">#7d7d7d</color> <!-- 65%灰 -->
+    <color name="gray_70">#707070</color> <!-- 70%灰 -->
+    <color name="gray_75">#626262</color> <!-- 75%灰 -->
+    <color name="gray_80">#535353</color> <!-- 80%灰 -->
+    <color name="gray_85">#434343</color> <!-- 85%灰 -->
+    <color name="gray_90">#313131</color> <!-- 90%灰 -->
+    <color name="gray_95">#1b1b1b</color> <!-- 95%灰 -->
+
+
+    <!-- drawable 颜色 -->
+    <drawable name="red">#ff0000</drawable> <!-- 红色 -->
+    <drawable name="orange">#ff6600</drawable> <!-- 橙色 -->
+    <drawable name="yello">#ffff00</drawable> <!-- 黄色 -->
+    <drawable name="green">#00ff00</drawable> <!-- 绿色 -->
+    <drawable name="cyan">#00ffff</drawable> <!-- 青色 -->
+    <drawable name="blue">#0000ff</drawable> <!-- 蓝色 -->
+    <drawable name="purple">#800080</drawable> <!-- 紫色 -->
+    <drawable name="pink">#FFC0CB</drawable> <!-- 粉色 -->
+    <drawable name="magenta">#FF00FF</drawable> <!-- 洋红 -->
+    <drawable name="white">#ffffff</drawable> <!-- 白色 -->
+    <drawable name="black">#000000</drawable> <!-- 黑色 -->
+
+    <drawable name="transparent">#00000000</drawable> <!-- 透明 -->
+
+    <drawable name="gray_10">#eeeeee</drawable> <!-- 10%灰 -->
+    <drawable name="gray_15">#e5e5e5</drawable> <!-- 15%灰 -->
+    <drawable name="gray_20">#dcdcdc</drawable> <!-- 20%灰 -->
+    <drawable name="gray_25">#d2d2d2</drawable> <!-- 25%灰 -->
+    <drawable name="gray_30">#c9c9c9</drawable> <!-- 30%灰 -->
+    <drawable name="gray_35">#bfbfbf</drawable> <!-- 35%灰 -->
+    <drawable name="gray_40">#b5b5b5</drawable> <!-- 40%灰 -->
+    <drawable name="gray_45">#aaaaaa</drawable> <!-- 45%灰 -->
+    <drawable name="gray_50">#a0a0a0</drawable> <!-- 50%灰 -->
+    <drawable name="gray_55">#959595</drawable> <!-- 55%灰 -->
+    <drawable name="gray_60">#898989</drawable> <!-- 60%灰 -->
+    <drawable name="gray_65">#7d7d7d</drawable> <!-- 65%灰 -->
+    <drawable name="gray_70">#707070</drawable> <!-- 70%灰 -->
+    <drawable name="gray_75">#626262</drawable> <!-- 75%灰 -->
+    <drawable name="gray_80">#535353</drawable> <!-- 80%灰 -->
+    <drawable name="gray_85">#434343</drawable> <!-- 85%灰 -->
+    <drawable name="gray_90">#313131</drawable> <!-- 90%灰 -->
+    <drawable name="gray_95">#1b1b1b</drawable> <!-- 95%灰 -->
+
+    <drawable name="green_translucent">#4000ff00</drawable> <!-- 绿色 -->
+
+</resources>

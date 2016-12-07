@@ -12,7 +12,7 @@ import android.view.View;
 import com.avos.avoscloud.im.v2.AVIMConversation;
 import com.avos.avoscloud.im.v2.AVIMException;
 import com.avos.avoscloud.im.v2.callback.AVIMConversationCallback;
-import com.leancloud.im.guide.AVImClientManager;
+import com.leancloud.im.guide.AVIMClientManager;
 import com.leancloud.im.guide.Constants;
 import com.leancloud.im.guide.LetterView;
 import com.leancloud.im.guide.adapter.MembersAdapter;
@@ -74,7 +74,7 @@ public class AVSquareMembersActivity extends AVBaseActivity {
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
-        itemAdapter = new MembersAdapter();
+        itemAdapter = new MembersAdapter(this);
         recyclerView.setAdapter(itemAdapter);
 
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -132,7 +132,7 @@ public class AVSquareMembersActivity extends AVBaseActivity {
      * 从 AVIMConversation 获取 member，如果本地没有则做拉取请求，然后更新 UI
      */
     private void getMembers() {
-        conversation = AVImClientManager.getInstance().getClient().getConversation(conversationId);
+        conversation = AVIMClientManager.getInstance().getClient().getConversation(conversationId);
         memberList = conversation.getMembers();
         if (null != memberList && memberList.size() > 0) {
             itemAdapter.setMemberList(memberList);

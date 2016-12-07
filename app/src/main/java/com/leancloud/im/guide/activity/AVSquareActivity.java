@@ -17,13 +17,12 @@ import com.avos.avoscloud.im.v2.AVIMConversationQuery;
 import com.avos.avoscloud.im.v2.AVIMException;
 import com.avos.avoscloud.im.v2.callback.AVIMConversationCallback;
 import com.avos.avoscloud.im.v2.callback.AVIMConversationQueryCallback;
-import com.leancloud.im.guide.AVImClientManager;
+import com.leancloud.im.guide.AVIMClientManager;
 import com.leancloud.im.guide.Constants;
 import com.leancloud.im.guide.R;
-import com.leancloud.im.guide.event.LeftChatItemClickEvent;
 import com.leancloud.im.guide.fragment.ChatFragment;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -36,7 +35,7 @@ import java.util.List;
  */
 public class AVSquareActivity extends AVBaseActivity {
 
-    private AVIMConversation squareConversation;
+    private AVIMConversation mConversation;
     private ChatFragment chatFragment;
     private Toolbar toolbar;
 
@@ -56,12 +55,19 @@ public class AVSquareActivity extends AVBaseActivity {
         String conversationId = getIntent().getStringExtra(Constants.CONVERSATION_ID);
         String title = getIntent().getStringExtra(Constants.ACTIVITY_TITLE);
         Debug.error(title);
+        attachActionBar(title);
 
-        chatFragment = (ChatFragment) getFragmentManager().findFragmentById(R.id.fragment_chat);
+        chatFragment = (ChatFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_chat);
+
+        getSquare(conversationId);
+        queryInSquare(conversationId);
+    }
+
+    private void attachActionBar(String title) {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-
         setSupportActionBar(toolbar);
-        toolbar.setNavigationIcon(R.drawable.btn_navigation_back);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        toolbar.setNavigationIcon(R.drawable.btn_navigation_back);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -69,9 +75,6 @@ public class AVSquareActivity extends AVBaseActivity {
             }
         });
         setTitle(title);
-
-        getSquare(conversationId);
-        queryInSquare(conversationId);
     }
 
     @Override
@@ -110,75 +113,64 @@ public class AVSquareActivity extends AVBaseActivity {
             throw new IllegalArgumentException("conversationId can not be null");
         }
 
-        AVIMClient client = AVImClientManager.getInstance().getClient();
+        AVIMClient client = AVIMClientManager.getInstance().getClient();
         if (null != client) {
-            squareConversation = client.getConversation(conversationId);
+            mConversation = client.getConversation(conversationId);
         } else {
             finish();
-            showToast("Please call AVIMClient.open first!");
+            Toast.show("请先登录");
         }
-    }
-
-    /**
-     * 加入 conversation
-     */
-    private void joinSquare() {
-        squareConversation.join(new AVIMConversationCallback() {
-            @Override
-            public void done(AVIMException e) {
-                if (filterException(e)) {
-                    chatFragment.setConversation(squareConversation);
-                }
-            }
-        });
     }
 
     /**
      * 先查询自己是否已经在该 conversation，如果存在则直接给 chatFragment 赋值，否则先加入，再赋值
      */
     private void queryInSquare(String conversationId) {
-        final AVIMClient client = AVImClientManager.getInstance().getClient();
+        AVIMClient client = AVIMClientManager.getInstance().getClient();
         AVIMConversationQuery conversationQuery = client.getQuery();
         conversationQuery.whereEqualTo("objectId", conversationId);
-        conversationQuery.containsMembers(Arrays.asList(AVImClientManager.getInstance().getClientId()));
+        conversationQuery.containsMembers(Collections.singletonList(AVIMClientManager.getInstance().getClientId()));
         conversationQuery.findInBackground(new AVIMConversationQueryCallback() {
             @Override
             public void done(List<AVIMConversation> list, AVIMException e) {
-                if (filterException(e)) {
-                    if (null != list && list.size() > 0) {
-                        chatFragment.setConversation(list.get(0));
-                    } else {
-                        joinSquare();
-                    }
+                if (Debug.printStackTrace(e)) return;
+                if (null != list && list.size() > 0) {
+                    chatFragment.setConversation(list.get(0));
+                } else {
+                    joinSquare();
                 }
             }
         });
     }
 
     /**
-     * 处理聊天 item 点击事件，点击后跳转到相应1对1的对话
+     * 加入 conversation
      */
-    public void onEvent(LeftChatItemClickEvent event) {
-        Intent intent = new Intent(this, AVSingleChatActivity.class);
-        intent.putExtra(Constants.MEMBER_ID, event.userId);
-        startActivity(intent);
+    private void joinSquare() {
+        mConversation.join(new AVIMConversationCallback() {
+            @Override
+            public void done(AVIMException e) {
+                if (Debug.printStackTrace(e)) return;
+                chatFragment.setConversation(mConversation);
+            }
+        });
     }
 
     /**
      * 退出会话
      */
     public void quit() {
-        if (squareConversation != null) {
-            squareConversation.quit(new AVIMConversationCallback() {
+        if (mConversation != null) {
+            mConversation.quit(new AVIMConversationCallback() {
                 @Override
                 public void done(AVIMException e) {
-                    if (e == null) {
-                        //退出成功
-                        setResult(RESULT_OK);
-                        AVSquareActivity.super.onBackPressed();
-                    } else {
+                    if (Debug.printStackTrace(e)) {
                         Toast.show("未退出会话！");
+                        return;
                     }
+                    //退出成功
+                    setResult(RESULT_OK);
+                    AVSquareActivity.super.onBackPressed();
                 }
             });
         }

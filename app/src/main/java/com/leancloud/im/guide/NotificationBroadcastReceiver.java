@@ -19,7 +19,7 @@ public class NotificationBroadcastReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        if (AVImClientManager.getInstance().getClient() == null) {
+        if (AVIMClientManager.getInstance().getClient() == null) {
             gotoLoginActivity(context);
         } else {
             String conversationId = intent.getStringExtra(Constants.CONVERSATION_ID);

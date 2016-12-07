@@ -1,14 +1,19 @@
 package com.leancloud.im.guide.adapter;
 
-import android.support.v7.widget.RecyclerView;
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
+import com.abooc.android.widget.BaseRecyclerAdapter;
+import com.abooc.android.widget.ViewHolder;
 import com.github.stuxuhai.jpinyin.PinyinFormat;
 import com.github.stuxuhai.jpinyin.PinyinHelper;
+import com.leancloud.im.guide.R;
+import com.leancloud.im.guide.adapter.MembersAdapter.MemberItem;
 import com.leancloud.im.guide.viewholder.MemberHolder;
 
 import java.text.Collator;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -16,16 +21,15 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import rx.Observable;
+import rx.functions.Action1;
+import rx.functions.Func1;
+
 /**
  * Created by wli on 15/8/14.
  * 成员列表 Adapter
  */
-public class MembersAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-
-    /**
-     * 所有 Adapter 成员的list
-     */
-    private List<MemberItem> memberList = new ArrayList<MemberItem>();
+public class MembersAdapter extends BaseRecyclerAdapter<MemberItem> {
 
     /**
      * 在有序 memberList 中 MemberItem.sortContent 第一次出现时的字母与位置的 map
@@ -37,7 +41,8 @@ public class MembersAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
      */
     Collator cmp = Collator.getInstance(Locale.SIMPLIFIED_CHINESE);
 
-    public MembersAdapter() {
+    public MembersAdapter(Context context) {
+        super(context);
     }
 
     /**
@@ -45,37 +50,41 @@ public class MembersAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
      * 此处会对数据以 空格、数字、字母（汉字转化为拼音后的字母） 的顺序进行重新排列
      */
     public void setMemberList(List<String> list) {
-        memberList.clear();
+        getCollection().clear();
         if (null != list) {
-            for (String name : list) {
-                MemberItem item = new MemberItem();
-                item.content = name;
-                item.sortContent = PinyinHelper.convertToPinyinString(name, "", PinyinFormat.WITHOUT_TONE);
-                memberList.add(item);
-            }
+            Observable.from(list)
+                    .map(new Func1<String, MemberItem>() {
+                        @Override
+                        public MemberItem call(String s) {
+                            MemberItem item = new MemberItem();
+                            item.content = s;
+                            item.sortContent = PinyinHelper.convertToPinyinString(s, "", PinyinFormat.WITHOUT_TONE);
+                            return item;
+                        }
+                    })
+                    .subscribe(new Action1<MemberItem>() {
+                        @Override
+                        public void call(MemberItem memberItem) {
+                            getCollection().add(memberItem);
+                        }
+                    });
         }
-        Collections.sort(memberList, new SortChineseName());
+        Collections.sort(getCollection(), new SortChineseName());
         updateIndex();
     }
 
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new MemberHolder(parent.getContext(), parent);
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_member_item, parent, false);
+        return new MemberHolder(view, mListener);
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
-        ((MemberHolder) holder).bindData(memberList.get(position));
-    }
-
-    @Override
-    public int getItemViewType(int position) {
-        return 1;
-    }
-
-    @Override
-    public int getItemCount() {
-        return memberList.size();
+    public void onBindViewHolder(ViewHolder h, int position) {
+        MemberItem member = getItem(position);
+        if (member == null) return;
+        MemberHolder holder = (MemberHolder) h;
+        holder.bindData(member);
     }
 
     /**
@@ -91,8 +100,8 @@ public class MembersAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private void updateIndex() {
         Character lastCharcter = '#';
         indexMap.clear();
-        for (int i = 0; i < memberList.size(); i++) {
-            Character curChar = Character.toLowerCase(memberList.get(i).sortContent.charAt(0));
+        for (int i = 0; i < getItemCount(); i++) {
+            Character curChar = Character.toLowerCase(getItem(i).sortContent.charAt(0));
             if (!lastCharcter.equals(curChar)) {
                 indexMap.put(curChar, i);
             }

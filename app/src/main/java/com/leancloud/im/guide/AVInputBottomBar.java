@@ -34,7 +34,6 @@ public class AVInputBottomBar extends LinearLayout {
      * 发送文本的Button
      */
     private ImageButton sendTextBtn;
-
     private EditText contentView;
 
     public AVInputBottomBar(Context context) {
@@ -72,8 +71,7 @@ public class AVInputBottomBar extends LinearLayout {
                     }
                 }, MIN_INTERVAL_SEND_MESSAGE);
 
-                EventBus.getDefault().post(
-                        new InputBottomBarTextEvent(InputBottomBarEvent.INPUTBOTTOMBAR_SEND_TEXT_ACTION, content, getTag()));
+                EventBus.getDefault().post(new InputBottomBarTextEvent(InputBottomBarEvent.INPUTBOTTOMBAR_SEND_TEXT_ACTION, content, getTag()));
             }
         });
     }

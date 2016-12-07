@@ -8,21 +8,21 @@ import com.avos.avoscloud.im.v2.callback.AVIMClientCallback;
 /**
  * Created by wli on 15/8/13.
  */
-public class AVImClientManager {
+public class AVIMClientManager {
 
-    private static AVImClientManager imClientManager;
+    private static AVIMClientManager imClientManager;
 
     private AVIMClient avimClient;
     private String clientId;
 
-    public synchronized static AVImClientManager getInstance() {
+    public synchronized static AVIMClientManager getInstance() {
         if (null == imClientManager) {
-            imClientManager = new AVImClientManager();
+            imClientManager = new AVIMClientManager();
         }
         return imClientManager;
     }
 
-    private AVImClientManager() {
+    private AVIMClientManager() {
     }
 
     public void open(String clientId, AVIMClientCallback callback) {

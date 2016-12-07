@@ -6,42 +6,50 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.text.Editable;
-import android.text.TextUtils;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.abooc.android.widget.ViewHolder.OnRecyclerItemClickListener;
+import com.abooc.test.data.LiveRoom;
 import com.abooc.util.Debug;
-import com.abooc.widget.Toast;
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
+import com.avos.avoscloud.AVQuery;
 import com.avos.avoscloud.im.v2.AVIMClient;
 import com.avos.avoscloud.im.v2.AVIMConversation;
 import com.avos.avoscloud.im.v2.AVIMConversationQuery;
 import com.avos.avoscloud.im.v2.AVIMException;
-import com.avos.avoscloud.im.v2.callback.AVIMClientCallback;
-import com.avos.avoscloud.im.v2.callback.AVIMConversationCallback;
 import com.avos.avoscloud.im.v2.callback.AVIMConversationQueryCallback;
+import com.leancloud.im.guide.AVIMClientManager;
 import com.leancloud.im.guide.Constants;
 import com.leancloud.im.guide.R;
 import com.leancloud.im.guide.activity.AVSquareActivity;
+import com.leancloud.im.guide.adapter.LiveRoomAdapter;
+import com.leancloud.im.guide.utils.AssetsUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ChatRoomListFragment extends Fragment {
+public class ChatRoomListFragment extends Fragment implements OnRecyclerItemClickListener {
 
 
-    String memberId;
+//    String memberId;
+    private SwipeRefreshLayout mRefreshLayout;
+    private RecyclerView mRoomList;
+    private LiveRoomAdapter mAdapter;
 
     TextView mEmptyView;
     ListView mListView;
-    final ListAdapter mListAdapter = new ListAdapter();
+    ListAdapter mListAdapter = new ListAdapter();
 
     public ChatRoomListFragment() {
     }
@@ -50,39 +58,40 @@ public class ChatRoomListFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        memberId = getArguments().getString(Constants.MEMBER_ID);
-
+//        memberId = getArguments().getString(Constants.MEMBER_ID);
+//        memberId = AVIMClientManager.getInstance().getClientId();
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_chatroom_list, container, false);
     }
 
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        mRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.refreshLayout);
+        mRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mRefreshLayout.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mRefreshLayout.setRefreshing(false);
+                        getLiveRooms();
+                    }
+                }, 800);
+            }
+        });
+        mRoomList = (RecyclerView) view.findViewById(R.id.roomList);
+        mRoomList.setLayoutManager(new LinearLayoutManager(getContext()));
+        mAdapter = new LiveRoomAdapter(getContext());
+        mAdapter.setOnRecyclerItemClickListener(this);
+        mRoomList.setAdapter(mAdapter);
 
         mEmptyView = (TextView) view.findViewById(R.id.Empty);
         mListView = (ListView) view.findViewById(R.id.ListView);
         mListView.setEmptyView(mEmptyView);
-        final EditText mJoinEdit = (EditText) view.findViewById(R.id.EditText);
-
-
-        view.findViewById(R.id.Join).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                Editable conversationId = mJoinEdit.getText();
-                Debug.error(conversationId);
-                if (TextUtils.isEmpty(conversationId)) {
-                    return;
-                } else {
-                    join(conversationId.toString());
-                }
-            }
-        });
         mListView.setAdapter(mListAdapter);
 
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -98,85 +107,54 @@ public class ChatRoomListFragment extends Fragment {
         });
 
         clear();
-        queryConversations(memberId);
-
+        queryConversations();
+        getLiveRooms();
     }
+
+    /**
+     * 获取直播间列表
+     */
+    public void getLiveRooms() {
+        String json = AssetsUtils.getFromAssets("LiveRoom.json", getContext());
+        List<LiveRoom> list = JSON.parseArray(json, LiveRoom.class);
+        mAdapter.update(list);
+    }
+
+    @Override
+    public void onItemClick(RecyclerView recyclerView, View itemView, int position) {
+        LiveRoom room = mAdapter.getItem(position);
+        if (room == null) return;
+        AVSquareActivity.launch(getActivity(), room.getConversationId(), room.getTitle());
+    }
+
 
     public void clear() {
         mEmptyView.setText("Loading...");
         mListAdapter.clear();
     }
 
-    public void queryConversations(String memberId) {
-        AVIMClient tom = AVIMClient.getInstance(memberId);
-        tom.open(new AVIMClientCallback() {
-
-            @Override
-            public void done(AVIMClient client, AVIMException e) {
-                if (e == null) {
-                    //登录成功
-                    AVIMConversationQuery query = client.getQuery();
-                    query.findInBackground(new AVIMConversationQueryCallback() {
-                        @Override
-                        public void done(final List<AVIMConversation> convs, AVIMException e) {
-                            if (e == null) {
-                                //convs就是获取到的conversation列表
-                                //注意：按每个对话的最后更新日期（收到最后一条消息的时间）倒序排列
-
-                                final Object toJSON = JSONArray.toJSON(convs);
-
-                                Debug.anchor(toJSON);
-
-                                new Handler().post(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        mListAdapter.update(convs);
-                                    }
-                                });
-
-
-                            }
-                        }
-                    });
-                }
-            }
-        });
-    }
-
     /**
-     * 加入会话
-     *
-     * @param conversationId
+     * 查询回话列表
      */
-    public void join(String conversationId) {
-        AVIMClient client = AVIMClient.getInstance(memberId);
+    public void queryConversations() {
+        AVIMClient client = AVIMClientManager.getInstance().getClient();
         AVIMConversationQuery query = client.getQuery();
-        query.whereEqualTo("objectId", conversationId);
+        query.setQueryPolicy(AVQuery.CachePolicy.NETWORK_ELSE_CACHE);
         query.findInBackground(new AVIMConversationQueryCallback() {
             @Override
-            public void done(List<AVIMConversation> convs, AVIMException e) {
-                if (e == null) {
-                    if (convs != null && !convs.isEmpty()) {
-                        final AVIMConversation conversation = convs.get(0); //就是想要的conversation
-                        conversation.join(new AVIMConversationCallback() {
-                            @Override
-                            public void done(AVIMException e) {
-                                if (e == null) {
-                                    //加入成功
-                                    AVSquareActivity.launch(getActivity(),
-                                            conversation.getConversationId(),
-                                            conversation.getName());
-                                } else {
-                                    Toast.show("加入失败！");
-                                }
-                            }
-                        });
-                    } else {
-                        Toast.show("未找到聊天室！");
+            public void done(final List<AVIMConversation> convs, AVIMException e) {
+                if (Debug.printStackTrace(e)) return;
+                //convs就是获取到的conversation列表
+                //注意：按每个对话的最后更新日期（收到最后一条消息的时间）倒序排列
+                final Object toJSON = JSONArray.toJSON(convs);
+                Debug.anchor(toJSON);
+
+                new Handler().post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mListAdapter.update(convs);
                     }
-                } else {
-                    Toast.show("加入聊天室失败！");
-                }
+                });
             }
         });
     }

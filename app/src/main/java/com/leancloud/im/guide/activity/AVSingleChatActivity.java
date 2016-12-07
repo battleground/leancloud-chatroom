@@ -1,5 +1,6 @@
 package com.leancloud.im.guide.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -11,7 +12,7 @@ import com.avos.avoscloud.im.v2.AVIMConversationQuery;
 import com.avos.avoscloud.im.v2.AVIMException;
 import com.avos.avoscloud.im.v2.callback.AVIMConversationCreatedCallback;
 import com.avos.avoscloud.im.v2.callback.AVIMConversationQueryCallback;
-import com.leancloud.im.guide.AVImClientManager;
+import com.leancloud.im.guide.AVIMClientManager;
 import com.leancloud.im.guide.Constants;
 import com.leancloud.im.guide.R;
 import com.leancloud.im.guide.fragment.ChatFragment;
@@ -19,8 +20,6 @@ import com.leancloud.im.guide.fragment.ChatFragment;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 
 import butterknife.Bind;
 
@@ -29,6 +28,12 @@ import butterknife.Bind;
  * 一对一单聊的页面，需要传入 Constants.MEMBER_ID
  */
 public class AVSingleChatActivity extends AVBaseActivity {
+
+    public static void launch(Context context, String clientId) {
+        Intent intent = new Intent(context, AVSingleChatActivity.class);
+        intent.putExtra(Constants.MEMBER_ID, clientId);
+        context.startActivity(intent);
+    }
 
     @Bind(R.id.toolbar)
     protected Toolbar toolbar;
@@ -40,7 +45,7 @@ public class AVSingleChatActivity extends AVBaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_square);
 
-        chatFragment = (ChatFragment) getFragmentManager().findFragmentById(R.id.fragment_chat);
+        chatFragment = (ChatFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_chat);
 
         setSupportActionBar(toolbar);
         toolbar.setNavigationIcon(R.drawable.btn_navigation_back);
@@ -72,7 +77,7 @@ public class AVSingleChatActivity extends AVBaseActivity {
      * 如果存在，则直接赋值给 ChatFragment，否者创建后再赋值
      */
     private void getConversation(final String memberId) {
-        final AVIMClient client = AVImClientManager.getInstance().getClient();
+        final AVIMClient client = AVIMClientManager.getInstance().getClient();
         AVIMConversationQuery conversationQuery = client.getQuery();
         conversationQuery.withMembers(Arrays.asList(memberId), true);
         conversationQuery.whereEqualTo("customConversationType", 1);

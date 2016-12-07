@@ -6,4 +6,21 @@
     <color name="divider_line_color">#afafaf</color>
 
     <color name="login_activity_bg">#efefef</color>
+
+
+    <!-- 分割线颜色 -->
+    <color name="line_h_gray">#dfdfdf</color>
+
+    <!-- 默认可点击，可选择 -->
+    <drawable name="default_selected_background_checked">#F7F7F7</drawable>
+    <drawable name="default_selected_background_selected">#30ffffff</drawable>
+    <drawable name="default_selected_background_press">#30666666</drawable>
+    <drawable name="default_selected_background_normal">#00000000</drawable>
+
+    <!-- 默认可点击，可选择 -->
+    <drawable name="default_button_background_selected">#f800AACC</drawable>
+    <drawable name="default_button_background_press">#f000AACC</drawable>
+    <drawable name="default_button_background_normal">#f000CFCC</drawable>
+    <drawable name="default_button_background_disable">#f0AACCDD</drawable>
+
 </resources>
