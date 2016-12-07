@@ -37,7 +37,7 @@
         android:gravity="center"
         android:text="暂无会话！"
         android:textColor="#CCC"
-        android:textSize="43sp" />
+        android:textSize="18sp" />
 
     <ListView
         android:id="@+id/ListView"

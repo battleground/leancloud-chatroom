@@ -15,8 +15,10 @@ import com.abooc.widget.Toast;
 import com.alibaba.fastjson.JSON;
 import com.avos.avoscloud.im.v2.AVIMClient;
 import com.avos.avoscloud.im.v2.AVIMException;
+import com.avos.avoscloud.im.v2.AVIMMessageManager;
 import com.avos.avoscloud.im.v2.callback.AVIMClientCallback;
 import com.leancloud.im.guide.AVIMClientManager;
+import com.leancloud.im.guide.ConversationEventHandler;
 import com.leancloud.im.guide.R;
 
 import java.util.ArrayList;
@@ -86,6 +88,7 @@ public class AVLoginActivity extends AVBaseActivity {
                     Toast.show("登录失败");
                     return;
                 }
+                AVIMMessageManager.setConversationEventHandler(new ConversationEventHandler());
                 ChatRoomsActivity.launch(AVLoginActivity.this);
                 finish();
             }

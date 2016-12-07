@@ -11,10 +11,10 @@ import com.avos.avoscloud.im.v2.AVIMMessage;
 import com.leancloud.im.guide.AVIMClientManager;
 import com.leancloud.im.guide.R;
 import com.leancloud.im.guide.viewholder.AVCommonViewHolder;
+import com.leancloud.im.guide.viewholder.ChatStatusHolder;
 import com.leancloud.im.guide.viewholder.LeftTextHolder;
 import com.leancloud.im.guide.viewholder.RightTextHolder;
 
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -25,6 +25,7 @@ public class MultipleItemAdapter extends BaseRecyclerAdapter<AVIMMessage> {
 
     private final int ITEM_LEFT_TEXT = 0;
     private final int ITEM_RIGHT_TEXT = 1;
+    private final int ITEM_STATUS = 2;
 
     // 时间间隔最小为十分钟
     private final long TIME_INTERVAL = 10 * 60 * 1000;
@@ -39,7 +40,7 @@ public class MultipleItemAdapter extends BaseRecyclerAdapter<AVIMMessage> {
     }
 
     public void addMessage(AVIMMessage message) {
-        getCollection().addAll(Arrays.asList(message));
+        getCollection().add(message);
         notifyDataSetChanged();
     }
 
@@ -57,11 +58,10 @@ public class MultipleItemAdapter extends BaseRecyclerAdapter<AVIMMessage> {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.chat_right_text_view, parent, false);
             return new RightTextHolder(view, null, mChildListener);
         } else {
-            //TODO
-            return null;
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.chat_status, parent, false);
+            return new ChatStatusHolder(view, null, null);
         }
     }
-
 
     @Override
     public void onBindViewHolder(ViewHolder h, int position) {
@@ -75,7 +75,9 @@ public class MultipleItemAdapter extends BaseRecyclerAdapter<AVIMMessage> {
     @Override
     public int getItemViewType(int position) {
         AVIMMessage message = getItem(position);
-        if (message.getFrom().equals(AVIMClientManager.getInstance().getClientId())) {
+        if (message.getFrom() == null) {
+            return ITEM_STATUS;
+        } else if (message.getFrom().equals(AVIMClientManager.getInstance().getClientId())) {
             return ITEM_RIGHT_TEXT;
         } else {
             return ITEM_LEFT_TEXT;

@@ -26,12 +26,17 @@ import com.leancloud.im.guide.NotificationUtils;
 import com.leancloud.im.guide.R;
 import com.leancloud.im.guide.activity.AVSingleChatActivity;
 import com.leancloud.im.guide.adapter.MultipleItemAdapter;
+import com.leancloud.im.guide.event.ConversationStatusEvent;
+import com.leancloud.im.guide.event.ConversationStatusEvent.EventAction;
 import com.leancloud.im.guide.event.ImTypeMessageEvent;
 import com.leancloud.im.guide.event.InputBottomBarTextEvent;
 
 import java.util.List;
 
 import de.greenrobot.event.EventBus;
+import rx.Observable;
+import rx.functions.Action1;
+import rx.functions.Func2;
 
 /**
  * Created by wli on 15/8/27.
@@ -147,10 +152,7 @@ public class ChatFragment extends Fragment implements OnRecyclerItemChildClickLi
             @Override
             public void done(List<AVIMMessage> list, AVIMException e) {
                 if (Debug.printStackTrace(e)) return;
-                Debug.out(list);
                 mAdapter.update(list);
-//                mRecyclerView.setAdapter(mAdapter);
-//                mAdapter.notifyDataSetChanged();
                 scrollToBottom();
             }
         });
@@ -219,6 +221,40 @@ public class ChatFragment extends Fragment implements OnRecyclerItemChildClickLi
         if (mConversation.getConversationId().equals(event.conversation.getConversationId())) {
             mAdapter.addMessage(event.message);
             scrollToBottom();
+        }
+    }
+
+    /**
+     * 当有成员加入、退出、被踢、被邀请时调用
+     */
+    public void onEvent(ConversationStatusEvent event) {
+        if (mConversation == null || event == null || !event.isOK(mConversation))
+            return;
+        // 加入、退出
+        if (event.action == EventAction.JOIN || event.action == EventAction.QUIT) {
+            List<String> members = event.members;
+            final StringBuilder sb = new StringBuilder();
+            Observable.from(members)
+                    .reduce(new Func2<String, String, String>() {
+                        @Override
+                        public String call(String s, String s2) {
+                            return s + ", " + s2;
+                        }
+                    })
+                    .subscribe(new Action1<String>() {
+                        @Override
+                        public void call(String s) {
+                            Debug.out(s);
+                            sb.append(s);
+                        }
+                    });
+            sb.append(event.action.getValue());
+            AVIMMessage message = new AVIMMessage();
+            message.setContent(sb.toString());
+            mAdapter.addMessage(message);
+            scrollToBottom();
+        } else if (event.action == EventAction.REMOVE) { // 自己被踢出
+            getActivity().finish();
         }
     }
 

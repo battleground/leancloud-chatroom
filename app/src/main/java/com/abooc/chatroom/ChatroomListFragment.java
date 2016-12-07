@@ -111,6 +111,13 @@ public class ChatRoomListFragment extends Fragment implements OnRecyclerItemClic
         getLiveRooms();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        clear();
+        queryConversations();
+    }
+
     /**
      * 获取直播间列表
      */
@@ -129,7 +136,7 @@ public class ChatRoomListFragment extends Fragment implements OnRecyclerItemClic
 
 
     public void clear() {
-        mEmptyView.setText("Loading...");
+//        mEmptyView.setText("Loading...");
         mListAdapter.clear();
     }
 
