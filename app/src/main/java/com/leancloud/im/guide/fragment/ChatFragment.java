@@ -21,6 +21,7 @@ import com.avos.avoscloud.im.v2.callback.AVIMConversationCallback;
 import com.avos.avoscloud.im.v2.callback.AVIMConversationMemberCountCallback;
 import com.avos.avoscloud.im.v2.callback.AVIMMessagesQueryCallback;
 import com.avos.avoscloud.im.v2.messages.AVIMTextMessage;
+import com.leancloud.im.guide.AVIMClientManager;
 import com.leancloud.im.guide.AVInputBottomBar;
 import com.leancloud.im.guide.NotificationUtils;
 import com.leancloud.im.guide.R;
@@ -233,6 +234,12 @@ public class ChatFragment extends Fragment implements OnRecyclerItemChildClickLi
         // 加入、退出
         if (event.action == EventAction.JOIN || event.action == EventAction.QUIT) {
             List<String> members = event.members;
+            // 过滤自己
+            if (members.contains(AVIMClientManager.getInstance().getClientId())) {
+                members.remove(AVIMClientManager.getInstance().getClientId());
+            }
+            if (members.isEmpty()) return;
+            // 合成消息
             final StringBuilder sb = new StringBuilder();
             Observable.from(members)
                     .reduce(new Func2<String, String, String>() {

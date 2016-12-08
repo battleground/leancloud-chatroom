@@ -40,6 +40,7 @@ public class LiveRoomAdapter extends BaseRecyclerAdapter<LiveRoom> {
 
         TextView title;
         TextView userName;
+        TextView tr;
 
         public LiveRoomHolder(View itemLayoutView, OnRecyclerItemClickListener listener) {
             super(itemLayoutView, listener);
@@ -49,11 +50,14 @@ public class LiveRoomAdapter extends BaseRecyclerAdapter<LiveRoom> {
         public void onBindedView(View itemLayoutView) {
             title = (TextView) itemLayoutView.findViewById(R.id.title);
             userName = (TextView) itemLayoutView.findViewById(R.id.userName);
+            tr = (TextView) itemLayoutView.findViewById(R.id.tr);
         }
 
         public void bindData(LiveRoom room) {
             title.setText(room.getTitle());
             userName.setText(room.getCreatId());
+            tr.setText(room.isTr() ? "暂态" : null);
+            tr.setVisibility(room.isTr() ? View.VISIBLE : View.INVISIBLE);
         }
 
     }

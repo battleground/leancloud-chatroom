@@ -1,38 +1,44 @@
 [
   {
-    "title": "聊天室001",
     "roomId": "liveroom001",
+    "title": "聊天室001",
     "creatId": "张三",
+    "tr": "true",
     "conversationId": "58468c782f301e005c19af3d"
   },
   {
-    "title": "聊天室002",
     "roomId": "liveroom002",
+    "title": "聊天室002",
     "creatId": "李四",
+    "tr": "true",
     "conversationId": "58468c78ac502e006b0955ad"
   },
   {
-    "title": "聊天室003",
     "roomId": "liveroom003",
+    "title": "聊天室003",
     "creatId": "王五",
+    "tr": "true",
     "conversationId": "58468c7861ff4b006ba812a9"
   },
   {
-    "title": "聊天室004",
     "roomId": "liveroom004",
+    "title": "聊天室004",
     "creatId": "朱六",
+    "tr": "true",
     "conversationId": "58468c78a22b9d006c317dfe"
   },
   {
-    "title": "聊天室005",
     "roomId": "liveroom005",
+    "title": "聊天室005",
     "creatId": "李四",
+    "tr": "false",
     "conversationId": "58411255128fe1005898c163"
   },
   {
-    "title": "聊天室006",
     "roomId": "liveroom006",
+    "title": "聊天室006",
     "creatId": "李四",
+    "tr": "false",
     "conversationId": "583ff241ac502e006cbc626f"
   }
 ]

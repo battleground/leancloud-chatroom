@@ -7,25 +7,20 @@ package com.abooc.test.data;
 
 public class LiveRoom {
 
+
     /**
-     * title : 聊天室001
      * roomId : liveroom001
+     * title : 聊天室001
      * creatId : 张三
-     * conversationId : 5836b51a128fe178553f475e
+     * tr : true
+     * conversationId : 58468c782f301e005c19af3d
      */
 
-    private String title;
     private String roomId;
+    private String title;
     private String creatId;
+    private boolean tr;
     private String conversationId;
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
 
     public String getRoomId() {
         return roomId;
@@ -33,6 +28,14 @@ public class LiveRoom {
 
     public void setRoomId(String roomId) {
         this.roomId = roomId;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getCreatId() {
@@ -43,6 +46,14 @@ public class LiveRoom {
         this.creatId = creatId;
     }
 
+    public boolean isTr() {
+        return tr;
+    }
+
+    public void setTr(boolean tr) {
+        this.tr = tr;
+    }
+
     public String getConversationId() {
         return conversationId;
     }
@@ -50,4 +61,5 @@ public class LiveRoom {
     public void setConversationId(String conversationId) {
         this.conversationId = conversationId;
     }
+
 }

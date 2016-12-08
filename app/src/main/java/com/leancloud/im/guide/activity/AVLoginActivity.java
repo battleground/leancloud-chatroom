@@ -55,7 +55,6 @@ public class AVLoginActivity extends AVBaseActivity {
         UserLoader.loadUsers(new UserLoader.OnGetUsersListener() {
             @Override
             public void onGet(ArrayList<User> users) {
-
 //                Object toJSON = JSONArray.toJSON(users);
                 String text = JSON.toJSONString(users);
                 Debug.out("content:\n" + text);
