@@ -18,11 +18,10 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.abooc.android.widget.ViewHolder.OnRecyclerItemClickListener;
+import com.abooc.joker.adapter.recyclerview.ViewHolder.OnRecyclerItemClickListener;
 import com.abooc.test.data.LiveRoom;
 import com.abooc.util.Debug;
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
 import com.avos.avoscloud.AVQuery;
 import com.avos.avoscloud.im.v2.AVIMClient;
 import com.avos.avoscloud.im.v2.AVIMConversation;
@@ -144,7 +143,7 @@ public class ChatRoomListFragment extends Fragment implements OnRecyclerItemClic
      * 查询回话列表
      */
     public void queryConversations() {
-        AVIMClient client = AVIMClientManager.getInstance().getClient();
+        final AVIMClient client = AVIMClientManager.getInstance().getClient();
         AVIMConversationQuery query = client.getQuery();
         query.setQueryPolicy(AVQuery.CachePolicy.NETWORK_ELSE_CACHE);
         query.findInBackground(new AVIMConversationQueryCallback() {
@@ -153,8 +152,10 @@ public class ChatRoomListFragment extends Fragment implements OnRecyclerItemClic
                 if (Debug.printStackTrace(e)) return;
                 //convs就是获取到的conversation列表
                 //注意：按每个对话的最后更新日期（收到最后一条消息的时间）倒序排列
-                final Object toJSON = JSONArray.toJSON(convs);
-                Debug.anchor(toJSON);
+//                final Object toJSON = JSONArray.toJSON(convs);
+                String json = JSON.toJSONString(convs);
+                Debug.anchor(json);
+
 
                 new Handler().post(new Runnable() {
                     @Override

@@ -5,8 +5,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.abooc.android.widget.BaseRecyclerAdapter;
-import com.abooc.android.widget.ViewHolder;
+import com.abooc.joker.adapter.recyclerview.BaseRecyclerAdapter;
+import com.abooc.joker.adapter.recyclerview.ViewHolder;
 import com.avos.avoscloud.im.v2.AVIMMessage;
 import com.leancloud.im.guide.AVIMClientManager;
 import com.leancloud.im.guide.R;
@@ -14,8 +14,6 @@ import com.leancloud.im.guide.viewholder.AVCommonViewHolder;
 import com.leancloud.im.guide.viewholder.ChatStatusHolder;
 import com.leancloud.im.guide.viewholder.LeftTextHolder;
 import com.leancloud.im.guide.viewholder.RightTextHolder;
-
-import java.util.List;
 
 /**
  * Created by wli on 15/8/13.
@@ -32,16 +30,6 @@ public class MultipleItemAdapter extends BaseRecyclerAdapter<AVIMMessage> {
 
     public MultipleItemAdapter(Context context) {
         super(context);
-    }
-
-    public void addFirst(List<AVIMMessage> messages) {
-        getCollection().addAll(0, messages);
-        notifyDataSetChanged();
-    }
-
-    public void addMessage(AVIMMessage message) {
-        getCollection().add(message);
-        notifyDataSetChanged();
     }
 
     public AVIMMessage getFirstMessage() {

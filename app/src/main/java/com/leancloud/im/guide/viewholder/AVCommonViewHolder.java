@@ -2,7 +2,7 @@ package com.leancloud.im.guide.viewholder;
 
 import android.view.View;
 
-import com.abooc.android.widget.ViewHolder;
+import com.abooc.joker.adapter.recyclerview.ViewHolder;
 
 
 /**

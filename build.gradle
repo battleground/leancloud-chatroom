@@ -16,7 +16,7 @@ allprojects {
     repositories {
         jcenter()
         mavenLocal()
-        maven { url "http://192.168.1.242:8081/repository/maven-public/" }
+        maven { url "http://192.168.1.111:8081/repository/maven-public/" }
         maven { url "http://mvn.leancloud.cn/nexus/content/repositories/releases" }
     }
 }

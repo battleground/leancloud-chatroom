@@ -11,7 +11,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.View;
 
-import com.abooc.android.widget.ViewHolder.OnRecyclerItemClickListener;
+import com.abooc.joker.adapter.recyclerview.ViewHolder.OnRecyclerItemClickListener;
 import com.abooc.util.Debug;
 import com.avos.avoscloud.im.v2.AVIMConversation;
 import com.avos.avoscloud.im.v2.AVIMException;

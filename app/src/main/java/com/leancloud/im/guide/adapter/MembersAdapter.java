@@ -5,8 +5,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.abooc.android.widget.BaseRecyclerAdapter;
-import com.abooc.android.widget.ViewHolder;
+import com.abooc.joker.adapter.recyclerview.BaseRecyclerAdapter;
+import com.abooc.joker.adapter.recyclerview.ViewHolder;
 import com.github.stuxuhai.jpinyin.PinyinFormat;
 import com.github.stuxuhai.jpinyin.PinyinHelper;
 import com.leancloud.im.guide.R;

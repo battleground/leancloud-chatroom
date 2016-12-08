@@ -6,8 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.abooc.android.widget.BaseRecyclerAdapter;
-import com.abooc.android.widget.ViewHolder;
+import com.abooc.joker.adapter.recyclerview.BaseRecyclerAdapter;
+import com.abooc.joker.adapter.recyclerview.ViewHolder;
 import com.abooc.test.data.LiveRoom;
 import com.leancloud.im.guide.R;
 

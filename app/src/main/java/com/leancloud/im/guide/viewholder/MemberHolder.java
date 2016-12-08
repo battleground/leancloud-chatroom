@@ -3,7 +3,7 @@ package com.leancloud.im.guide.viewholder;
 import android.view.View;
 import android.widget.TextView;
 
-import com.abooc.android.widget.ViewHolder;
+import com.abooc.joker.adapter.recyclerview.ViewHolder;
 import com.leancloud.im.guide.R;
 import com.leancloud.im.guide.adapter.MembersAdapter.MemberItem;
 
